@@ -1,0 +1,10 @@
+.env
+.git
+.gitignore
+app/storage/*
+!app/storage/.gitkeep
+node_modules
+*.log
+__pycache__
+*.zip
+preview

@@ -1,0 +1,56 @@
+name: myan-chat-support
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: myanchat
+      MYSQL_USER: myanchat
+      MYSQL_PASSWORD: ${MCS_DB_PASSWORD:?Run scripts/start-mac.sh}
+      MYSQL_ROOT_PASSWORD: ${MCS_DB_ROOT_PASSWORD:?Run scripts/start-mac.sh}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    networks: [private]
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+    ports:
+      - "127.0.0.1:${MCS_PORT:-8088}:80"
+    environment:
+      MCS_SETUP_KEY: ${MCS_SETUP_KEY:?Run scripts/start-mac.sh}
+      MCS_FORCE_HTTPS: ${MCS_FORCE_HTTPS:-0}
+      MCS_TRUSTED_PROXIES: ${MCS_TRUSTED_PROXIES:-}
+      MCS_DB_HOST: db
+      MCS_DB_PORT: '3306'
+      MCS_DB_NAME: myanchat
+      MCS_DB_USER: myanchat
+      MCS_DB_PASSWORD: ${MCS_DB_PASSWORD:?Run scripts/start-mac.sh}
+    volumes:
+      - ./app:/var/www/myan-chat/app
+      - app_storage:/var/www/myan-chat/app/storage
+    networks: [private]
+  maintenance:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      MCS_RETENTION_DAYS: ${MCS_RETENTION_DAYS:-90}
+    command: ["sh", "-c", "while true; do php /var/www/myan-chat/scripts/cleanup.php $$MCS_RETENTION_DAYS || true; sleep 86400; done"]
+    volumes:
+      - ./app:/var/www/myan-chat/app
+      - app_storage:/var/www/myan-chat/app/storage
+    networks: [private]
+networks:
+  private:
+volumes:
+  mysql_data:
+  app_storage:
