@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Panel · Myan Chat Support</title>
+<link rel="stylesheet" href="admin.css">
+<style>
+.mcs-msg{max-width:75%;margin:0 0 10px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid #dbe4f2}
+.mcs-msg p{margin:0}
+.mcs-msg small{color:#7a8db0;font-size:11px}
+.mcs-msg.guest{margin-right:auto}
+.mcs-msg.operator{background:#e8f0fe;margin-left:auto}
+.mcs-demo-note{background:#fff7d6;border:1px solid #e8c95a;border-radius:10px;padding:10px 14px;margin:0 0 14px;line-height:1.6}
+.mcs-nav{padding:10px 14px}
+.mcs-nav a{margin-right:14px;color:#1d4ed8;font-weight:600}
+</style>
+</head>
+<body class="admin-layout">
+<aside class="sidebar"><div class="sidebar-logo"><span class="logo-symbol"><span class="logo-fallback">✦</span></span><div><strong>Myan Chat</strong><small>SUPPORT · V1.0.2</small></div></div><p class="side-caption">WORKSPACE</p><nav id="nav"><button data-tab="overview">▦ &nbsp; Overview</button><button data-tab="inbox" class="active">◉ &nbsp; Live Inbox <span class="counter">1</span></button><button data-tab="history">◷ &nbsp; History</button><button data-tab="contacts">✉ &nbsp; Offline Messages</button><button data-tab="canned">▤ &nbsp; Quick Replies</button><button data-tab="operators">♙ &nbsp; Operators</button><button data-tab="sites">⌘ &nbsp; Websites &amp; Widget</button><button data-tab="settings">⚙ &nbsp; Settings</button></nav><div class="side-bottom"><p><span class="avatar">M</span><span><strong>Min SiThu</strong><small>Admin</small></span></p><p class="logout">Sign out ↗</p></div></aside>
+<div class="main-shell"><header class="topbar"><div><small>SUPPORT WORKSPACE</small><h1>Live Inbox</h1></div><div class="toolbar"><span class="live-led"></span><span class="online-label">Status</span><select aria-label="Operator availability"><option>Online</option><option>Away</option><option>Offline</option></select><select aria-label="Dashboard language"><option>English</option><option>မြန်မာ</option></select></div></header>
+<main id="main"><p class="mcs-nav"><a href="index.html">Installer preview</a><a href="user.html">User panel — try the chat</a><a href="https://github.com/itsmeminsithu/Myan-Chat-Support">GitHub</a></p>
+<p class="mcs-demo-note"><strong>Static demo of the operator dashboard.</strong> The layout and styling are the real app's. The conversation below is shared with the <a href="user.html">user panel</a> in your browser only — open both in two tabs, send a message as the visitor, and it appears here. Reply from this panel and it appears there. Nothing leaves your device; the real app stores conversations in MySQL.</p>
+<section class="screen active"><div class="inbox-layout"><div class="thread-panel"><div class="panel-head"><strong>Conversations</strong><span class="pill">Live</span></div><div class="thread-list"><div style="padding:14px"><strong>Demo visitor</strong><p class="muted" id="mcsThreadLast">—</p><small class="muted" id="mcsThreadCount"></small></div></div></div>
+<div class="chat-panel"><div class="chat-head"><div><h2>Demo visitor</h2><p class="muted">Viewing your site · this browser only</p></div><div class="flex-gap"><button class="button outline" type="button" id="mcsReset">Reset demo</button></div></div>
+<div id="mcsMsgs" class="chat-messages"></div>
+<div class="chat-compose"><textarea id="mcsReply" placeholder="Type your reply..." rows="2" maxlength="3000"></textarea><button id="mcsSend" class="button primary" type="button">Send ↗</button></div>
+</div></div></section>
+</main></div>
+<script src="demo.js"></script>
+<script>
+var box=document.getElementById('mcsMsgs');
+function draw(){ MCSDemo.render(box); }
+draw();
+function send(){
+  var v=document.getElementById('mcsReply').value.trim(); if(!v) return;
+  MCSDemo.push('operator',v); document.getElementById('mcsReply').value=''; draw();
+}
+document.getElementById('mcsSend').addEventListener('click',send);
+document.getElementById('mcsReset').addEventListener('click',function(){ MCSDemo.reset(); draw(); });
+window.addEventListener('storage',draw);
+</script>
+</body>
+</html>
