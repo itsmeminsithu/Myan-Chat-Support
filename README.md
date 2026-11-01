@@ -8,9 +8,13 @@ Self-hosted live chat for PHP/MySQL servers. Embed the widget on a website and m
 
 ## Live preview
 
-**https://itsmeminsithu.github.io/Myan-Chat-Support/**
+**https://itsmeminsithu.github.io/Myan-Chat-Support/** — three static pages, no sign-up:
 
-That page is the installer design only, as a static preview. The chat itself needs PHP and MySQL, so it does not run on GitHub Pages — run it with Docker (below) or on your own PHP/MySQL server.
+- **Installer** — the setup screen design.
+- **[User panel](https://itsmeminsithu.github.io/Myan-Chat-Support/user.html)** — the guest widget. Type a message and send it; an automatic operator reply comes back.
+- **[Admin panel](https://itsmeminsithu.github.io/Myan-Chat-Support/admin.html)** — the operator dashboard (Live Inbox). Open it in a second tab next to the user panel: the two share one conversation in your browser, so you can chat between them and see both sides.
+
+The demo runs only in your browser — there is no server behind it and messages are never sent anywhere. The real app needs PHP and MySQL: run it with Docker (below) or on your own server.
 
 
 ## Requirements
